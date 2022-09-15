@@ -3,6 +3,7 @@ using DataLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessLayer.DTOs;
+using BusinessLayer.Interfaces;
 
 namespace API.Controllers
 {
@@ -10,122 +11,63 @@ namespace API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly EkoshipContext _context;
+        private readonly IUserService _userService;
 
-        public UsersController(EkoshipContext context)
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
+        public IActionResult GetUsers()
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            return await _context.Users.Select(x => ItemToDTO(x)).ToListAsync();
+            var users = _userService.GetAll();
+            return Ok(users);
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetUser(long id)
+        public IActionResult GetUser(long id)
         {
-          if (_context.Users == null)
-          {
-              return NotFound();
-          }
-            var user = await _context.Users.FindAsync(id);
-
+            var user = _userService.Get(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            return ItemToDTO(user);
+            return Ok(user);
         }
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, UserDTO userDTO)
+        public IActionResult PutUser(long id, UserDTO userDTO)
         {
-            if (id != userDTO.Id)
-            {
-                return BadRequest();
-            }
-
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            user.FirstName = userDTO.FirstName;
-            user.LastName = userDTO.LastName;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) when (!UserExists(id))
-            {
-                return NotFound();
-            }
-
+            _userService.Update(userDTO, id);
             return NoContent();
         }
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> PostUser(UserDTO userDTO)
+        public IActionResult PostUser(UserDTO userDTO)
         {
-            var user = new User
-            {
-                FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _userService.Add(userDTO);
 
             return CreatedAtAction(
                 nameof(GetUser),
-                new { id = user.Id },
-                ItemToDTO(user));
+                new { id = userDTO.Id },
+                userDTO);
         }
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public IActionResult DeleteUser(long id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            _userService.Delete(id);
 
             return NoContent();
         }
-
-        private bool UserExists(long id)
-        {
-            return _context.Users.Any(e => e.Id == id);
-        }
-
-
-        private static UserDTO ItemToDTO(User user) =>
-            new UserDTO
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName
-            };
     }
 }
