@@ -65,8 +65,13 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(long id)
         {
-            _userService.Delete(id);
+            var user = _userService.Get(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
 
+            _userService.Delete(id);
             return NoContent();
         }
     }

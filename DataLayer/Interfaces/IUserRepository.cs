@@ -4,6 +4,6 @@ namespace DataLayer.Interfaces
 {
     public interface IUserRepository : IDataRepository<User>
     {
-        void Update(User entityToUpdate, User entity);
+        void Update(User userToUpdate, User user);
     }
 }
