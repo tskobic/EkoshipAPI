@@ -1,9 +1,7 @@
-using BusinessLayer.DTOs;
 using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
 using DataLayer;
 using DataLayer.Interfaces;
-using DataLayer.Models;
 using DataLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +15,7 @@ builder.Services.AddDbContext<EkoshipContext>(opt =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITodoItemService, TodoItemService>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "EkoshipApi", Version = "v1" });
