@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore;
-
-namespace DataLayer
+﻿namespace DataLayer
 {
+    using Microsoft.EntityFrameworkCore.Design;
+    using Microsoft.EntityFrameworkCore;
+
     public class EkoshipContextFactory : IDesignTimeDbContextFactory<EkoshipContext>
     {
         public EkoshipContext CreateDbContext(string[] args)

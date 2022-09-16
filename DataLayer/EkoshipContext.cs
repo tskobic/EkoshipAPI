@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
-using DataLayer.Models;
-
-namespace DataLayer
+﻿namespace DataLayer
 {
+    using Microsoft.EntityFrameworkCore;
+    using DataLayer.Models;
+
     public class EkoshipContext : DbContext
     {
         public EkoshipContext(DbContextOptions<EkoshipContext> options)
