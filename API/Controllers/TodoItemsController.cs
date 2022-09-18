@@ -20,7 +20,7 @@
         [HttpGet]
         public async Task<IActionResult> GetTodoItems()
         {
-            var todoItems = await _todoItemService.GetAll();
+            var todoItems = await _todoItemService.GetAllAsync();
             return Ok(todoItems);
         }
 
@@ -28,7 +28,7 @@
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTodoItem(long id)
         {
-            var todoItem = await _todoItemService.Get(id);
+            var todoItem = await _todoItemService.GetAsync(id);
             if (todoItem == null)
             {
                 return NotFound();
@@ -42,7 +42,7 @@
         [HttpPut("{id}")]
         public async Task <IActionResult> PutTodoItem(long id, TodoItemDTO todoItemDTO)
         {
-            await _todoItemService.Update(todoItemDTO, id);
+            await _todoItemService.UpdateAsync(todoItemDTO, id);
             return NoContent();
         }
 
@@ -51,7 +51,7 @@
         [HttpPost]
         public async Task<IActionResult> PostTodoItem(TodoItemDTO todoItemDTO)
         {
-            await _todoItemService.Add(todoItemDTO);
+            await _todoItemService.AddAsync(todoItemDTO);
 
             return CreatedAtAction(
                 nameof(GetTodoItem),
@@ -63,13 +63,13 @@
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodoItem(long id)
         {
-            var todoItem = await _todoItemService.Get(id);
+            var todoItem = await _todoItemService.GetAsync(id);
             if (todoItem == null)
             {
                 return NotFound();
             }
 
-            await _todoItemService.Delete(id);
+            await _todoItemService.DeleteAsync(id);
             return NoContent();
         }
     }

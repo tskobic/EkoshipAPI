@@ -2,40 +2,58 @@
 {
     using AutoMapper;
     using BusinessLayer.DTOs;
-    using DataLayer;
     using DataLayer.Interfaces;
     using DataLayer.Models;
 
     public class UserService : Service<UserDTO, User>
     {
         private readonly IDataRepository<User> _userRepository;
-        private readonly DatabaseScope _databaseScope;
+        private readonly IDatabaseScope _databaseScope;
 
-        public UserService(IDataRepository<User> userRepository, IMapper mapper, DatabaseScope databaseScope) 
+        public UserService(IDataRepository<User> userRepository, IMapper mapper, IDatabaseScope databaseScope)
             : base(userRepository, mapper, databaseScope)
         {
             _userRepository = userRepository;
             _databaseScope = databaseScope;
         }
 
-        public async override Task Add(UserDTO userDTO)
+        public async override Task AddAsync(UserDTO userDTO)
         {
+            List<TodoItem> addedTodoItems = new List<TodoItem>();
+
+            if (userDTO.TodoItems != null)
+            {
+                foreach (var item in userDTO.TodoItems)
+                {
+                    var todoItem = new TodoItem
+                    {
+                        Name = item.Name,
+                        IsComplete = item.IsComplete
+                    };
+
+                    addedTodoItems.Add(todoItem);
+                }
+            }
+
             var user = new User
             {
                 FirstName = userDTO.FirstName,
-                LastName = userDTO.LastName
+                LastName = userDTO.LastName,
+                TodoItems = addedTodoItems,
             };
 
-            await _userRepository.Add(user);
-            _databaseScope.Save();
+            await _userRepository.AddAsync(user);
+            _databaseScope.SaveAsync();
         }
 
-        public async override Task Update(UserDTO userDTO, long id)
+        public async override Task UpdateAsync(UserDTO userDTO, long id)
         {
-            User userToUpdate = await _userRepository.Get(id);
+            User userToUpdate = await _userRepository.GetAsync(id);
+
             userToUpdate.FirstName = userDTO.FirstName;
             userToUpdate.LastName = userDTO.LastName;
-            _databaseScope.Save();
+
+            _databaseScope.SaveAsync();
         }
     }
 }

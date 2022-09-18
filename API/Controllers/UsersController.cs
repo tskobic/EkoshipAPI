@@ -20,7 +20,7 @@
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _userService.GetAll();
+            var users = await _userService.GetAllAsync();
             return Ok(users);
         }
 
@@ -28,7 +28,7 @@
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(long id)
         {
-            var user = await _userService.Get(id);
+            var user = await _userService.GetAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -42,7 +42,7 @@
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(long id, UserDTO userDTO)
         {
-            await _userService.Update(userDTO, id);
+            await _userService.UpdateAsync(userDTO, id);
             return NoContent();
         }
 
@@ -51,7 +51,7 @@
         [HttpPost]
         public async Task<IActionResult> PostUser(UserDTO userDTO)
         {
-            await _userService.Add(userDTO);
+            await _userService.AddAsync(userDTO);
 
             return CreatedAtAction(
                 nameof(GetUser),
@@ -63,13 +63,13 @@
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(long id)
         {
-            var user = await _userService.Get(id);
+            var user = await _userService.GetAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            await _userService.Delete(id);
+            await _userService.DeleteAsync(id);
             return NoContent();
         }
     }

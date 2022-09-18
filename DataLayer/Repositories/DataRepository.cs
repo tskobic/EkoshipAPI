@@ -1,7 +1,6 @@
 ﻿namespace DataLayer.Repositories
 {
     using DataLayer.Interfaces;
-    using Microsoft.EntityFrameworkCore;
 
     public abstract class DataRepository<TEntity> : IDataRepository<TEntity> where TEntity : class
     {
@@ -17,12 +16,12 @@
             return _ekoshipContext.Set<TEntity>();
         }
 
-        public async Task<TEntity> Get(long id)
+        public async Task<TEntity> GetAsync(long id)
         {
             return await _ekoshipContext.Set<TEntity>().FindAsync(id);
         }
 
-        public async Task Add(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
             await _ekoshipContext.Set<TEntity>().AddAsync(entity);
         }

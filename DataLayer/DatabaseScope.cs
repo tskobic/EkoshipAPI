@@ -1,6 +1,8 @@
 ﻿namespace DataLayer
 {
-    public class DatabaseScope
+    using DataLayer.Interfaces;
+
+    public class DatabaseScope : IDatabaseScope
     {
         private readonly EkoshipContext _ekoshipContext;
 
@@ -9,7 +11,7 @@
             _ekoshipContext = ekoshipContext;
         }
 
-        public void Save()
+        public void SaveAsync()
         {
             _ekoshipContext.SaveChangesAsync();
         }

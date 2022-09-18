@@ -2,23 +2,22 @@
 {
     using AutoMapper;
     using BusinessLayer.DTOs;
-    using DataLayer;
     using DataLayer.Interfaces;
     using DataLayer.Models;
 
     public class TodoItemService : Service<TodoItemDTO, TodoItem>
     {
         private readonly IDataRepository<TodoItem> _todoItemRepository;
-        private readonly DatabaseScope _databaseScope;
+        private readonly IDatabaseScope _databaseScope;
 
-        public TodoItemService(IDataRepository<TodoItem> todoItemRepository, IMapper mapper, DatabaseScope databaseScope) 
+        public TodoItemService(IDataRepository<TodoItem> todoItemRepository, IMapper mapper, IDatabaseScope databaseScope) 
             : base(todoItemRepository, mapper, databaseScope)
         {
             _todoItemRepository = todoItemRepository;
             _databaseScope = databaseScope;
         }
 
-        public async override Task Add(TodoItemDTO todoItemDTO)
+        public async override Task AddAsync(TodoItemDTO todoItemDTO)
         {
             var todoItem = new TodoItem
             {
@@ -26,18 +25,18 @@
                 IsComplete = todoItemDTO.IsComplete
             };
 
-            await _todoItemRepository.Add(todoItem);
-            _databaseScope.Save();
+            await _todoItemRepository.AddAsync(todoItem);
+            _databaseScope.SaveAsync();
         }
 
-        public async override Task Update(TodoItemDTO todoItemDTO, long id)
+        public async override Task UpdateAsync(TodoItemDTO todoItemDTO, long id)
         {
-            TodoItem todoItemToUpdate = await _todoItemRepository.Get(id);
+            TodoItem todoItemToUpdate = await _todoItemRepository.GetAsync(id);
 
             todoItemToUpdate.Name = todoItemDTO.Name;
             todoItemToUpdate.IsComplete = todoItemDTO.IsComplete;
 
-            _databaseScope.Save();
+            _databaseScope.SaveAsync();
         }
     }
 }

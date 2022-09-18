@@ -3,7 +3,6 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using BusinessLayer.Interfaces;
-    using DataLayer;
     using DataLayer.Interfaces;
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
@@ -12,25 +11,25 @@
     {
         private readonly IDataRepository<T> _dataRepository;
         private readonly IMapper _mapper;
-        private readonly DatabaseScope _databaseScope;
+        private readonly IDatabaseScope _databaseScope;
 
-        public Service(IDataRepository<T> dataRepository, IMapper mapper, DatabaseScope databaseScope)
+        public Service(IDataRepository<T> dataRepository, IMapper mapper, IDatabaseScope databaseScope)
         {
             _dataRepository = dataRepository;
             _mapper = mapper;
             _databaseScope = databaseScope;
         }
 
-        public async Task<IEnumerable<TDTO>> GetAll()
+        public async Task<IEnumerable<TDTO>> GetAllAsync()
         {
             var items = await _dataRepository.GetAll().ProjectTo<TDTO>(_mapper.ConfigurationProvider).ToListAsync();
 
             return items;
         }
 
-        public async Task<TDTO> Get(long id)
+        public async Task<TDTO> GetAsync(long id)
         {
-            var item = await _dataRepository.Get(id);
+            var item = await _dataRepository.GetAsync(id);
 
             if (item == null)
             {
@@ -42,15 +41,15 @@
             return itemDTO;
         }
 
-        public abstract Task Add(TDTO itemDTO);
+        public abstract Task AddAsync(TDTO itemDTO);
 
-        public abstract Task Update(TDTO itemDTO, long id);
+        public abstract Task UpdateAsync(TDTO itemDTO, long id);
 
-        public async Task Delete(long id)
+        public async Task DeleteAsync(long id)
         {
-            var item = await _dataRepository.Get(id);
+            var item = await _dataRepository.GetAsync(id);
             _dataRepository.Delete(item);
-            _databaseScope.Save();
+            _databaseScope.SaveAsync();
         }
     }
 }

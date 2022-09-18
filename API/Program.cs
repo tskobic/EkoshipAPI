@@ -9,16 +9,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<EkoshipContext>(opt =>
-    opt.UseInMemoryDatabase("Ekoship"));
+    opt.UseSqlServer(configuration.GetConnectionString("LocalConnection")));
 builder.Services.AddScoped<IDataRepository<User>, UserRepository>();
 builder.Services.AddScoped<IDataRepository<TodoItem>, TodoItemRepository>();
+builder.Services.AddScoped<IDatabaseScope, DatabaseScope>();
 builder.Services.AddScoped<IService<UserDTO, User>, UserService>();
 builder.Services.AddScoped<IService<TodoItemDTO, TodoItem>, TodoItemService>();
-builder.Services.AddScoped<DatabaseScope, DatabaseScope>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSwaggerGen(c =>
 {

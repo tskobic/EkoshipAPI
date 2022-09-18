@@ -3,8 +3,8 @@
     public interface IDataRepository<TEntity>
     {
         IQueryable<TEntity> GetAll();
-        Task<TEntity> Get(long id);
-        Task Add(TEntity entity);
+        Task<TEntity> GetAsync(long id);
+        Task AddAsync(TEntity entity);
         void Delete(TEntity entity);
     }
 }
