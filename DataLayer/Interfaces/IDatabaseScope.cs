@@ -2,6 +2,6 @@
 {
     public interface IDatabaseScope
     {
-        public void SaveAsync();
+        public Task<int> SaveAsync();
     }
 }

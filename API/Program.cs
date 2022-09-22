@@ -18,8 +18,8 @@ builder.Services.AddDbContext<EkoshipContext>(opt =>
 builder.Services.AddScoped<IDataRepository<User>, UserRepository>();
 builder.Services.AddScoped<IDataRepository<TodoItem>, TodoItemRepository>();
 builder.Services.AddScoped<IDatabaseScope, DatabaseScope>();
-builder.Services.AddScoped<IService<UserDTO, User>, UserService>();
-builder.Services.AddScoped<IService<TodoItemDTO, TodoItem>, TodoItemService>();
+builder.Services.AddScoped<IService<UserCreateUpdateDTO, UserDTO, User>, UserService>();
+builder.Services.AddScoped<IService<TodoItemCreateUpdateDTO, TodoItemDTO, TodoItem>, TodoItemService>();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSwaggerGen(c =>
 {

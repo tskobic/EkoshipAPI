@@ -5,7 +5,7 @@
     using DataLayer.Interfaces;
     using DataLayer.Models;
 
-    public class UserService : Service<UserDTO, User>
+    public class UserService : Service<UserCreateUpdateDTO, UserDTO, User>
     {
         private readonly IDataRepository<User> _userRepository;
         private readonly IDatabaseScope _databaseScope;
@@ -17,7 +17,7 @@
             _databaseScope = databaseScope;
         }
 
-        public async override Task AddAsync(UserDTO userDTO)
+        public async override Task AddAsync(UserCreateUpdateDTO userDTO)
         {
             List<TodoItem> addedTodoItems = new List<TodoItem>();
 
@@ -43,17 +43,17 @@
             };
 
             await _userRepository.AddAsync(user);
-            _databaseScope.SaveAsync();
+            await _databaseScope.SaveAsync();
         }
 
-        public async override Task UpdateAsync(UserDTO userDTO, long id)
+        public async override Task UpdateAsync(UserCreateUpdateDTO userDTO, long id)
         {
             User userToUpdate = await _userRepository.GetAsync(id);
 
             userToUpdate.FirstName = userDTO.FirstName;
             userToUpdate.LastName = userDTO.LastName;
 
-            _databaseScope.SaveAsync();
+            await _databaseScope.SaveAsync();
         }
     }
 }

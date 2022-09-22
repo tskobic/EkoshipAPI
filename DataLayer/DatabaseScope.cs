@@ -11,9 +11,9 @@
             _ekoshipContext = ekoshipContext;
         }
 
-        public void SaveAsync()
+        public Task<int> SaveAsync()
         {
-            _ekoshipContext.SaveChangesAsync();
+            return _ekoshipContext.SaveChangesAsync();
         }
     }
 }

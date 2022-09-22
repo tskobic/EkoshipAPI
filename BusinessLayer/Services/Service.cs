@@ -7,7 +7,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
 
-    public abstract class Service<TDTO, T> : IService<TDTO, T> where TDTO : class where T : class
+    public abstract class Service<TCreateUpdateDTO, TDTO, T> : IService<TCreateUpdateDTO, TDTO, T> where TCreateUpdateDTO : class where TDTO : class where T : class
     {
         private readonly IDataRepository<T> _dataRepository;
         private readonly IMapper _mapper;
@@ -41,15 +41,15 @@
             return itemDTO;
         }
 
-        public abstract Task AddAsync(TDTO itemDTO);
+        public abstract Task AddAsync(TCreateUpdateDTO itemDTO);
 
-        public abstract Task UpdateAsync(TDTO itemDTO, long id);
+        public abstract Task UpdateAsync(TCreateUpdateDTO itemDTO, long id);
 
         public async Task DeleteAsync(long id)
         {
             var item = await _dataRepository.GetAsync(id);
             _dataRepository.Delete(item);
-            _databaseScope.SaveAsync();
+            await _databaseScope.SaveAsync();
         }
     }
 }

@@ -9,9 +9,9 @@
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
-        private readonly IService<TodoItemDTO, TodoItem> _todoItemService;
+        private readonly IService<TodoItemCreateUpdateDTO, TodoItemDTO, TodoItem> _todoItemService;
 
-        public TodoItemsController(IService<TodoItemDTO, TodoItem> todoItemService)
+        public TodoItemsController(IService<TodoItemCreateUpdateDTO, TodoItemDTO, TodoItem> todoItemService)
         {
             _todoItemService = todoItemService;
         }
@@ -49,14 +49,11 @@
         // POST: api/TodoItems
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostTodoItem(TodoItemDTO todoItemDTO)
+        public async Task<IActionResult> PostTodoItem(TodoItemCreateUpdateDTO todoItemDTO)
         {
             await _todoItemService.AddAsync(todoItemDTO);
 
-            return CreatedAtAction(
-                nameof(GetTodoItem),
-                new { id = todoItemDTO.Id },
-                todoItemDTO);
+            return NoContent();
         }
 
         // DELETE: api/TodoItems/5
