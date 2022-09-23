@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace DataLayer.Models
+﻿namespace DataLayer.Models
 {
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     public class User
     {
         [Key]
@@ -15,6 +14,6 @@ namespace DataLayer.Models
         public string? Password { get; set; }
 
         [InverseProperty(nameof(TodoItem.User))]
-        public virtual ICollection<TodoItem>? TodoItems { get; set; }
+        public virtual ICollection<TodoItem>? TodoItems { get; set; } = new List<TodoItem>();
     }
 }

@@ -9,9 +9,11 @@
     [ApiController]
     public class TodoItemsController : ControllerBase
     {
-        private readonly IService<TodoItemCreateUpdateDTO, TodoItemDTO, TodoItem> _todoItemService;
+        private readonly ITodoItemService<TodoItemSelectionListDTO, 
+            TodoItemCreateUpdateDTO, TodoItemDTO, TodoItem> _todoItemService;
 
-        public TodoItemsController(IService<TodoItemCreateUpdateDTO, TodoItemDTO, TodoItem> todoItemService)
+        public TodoItemsController(ITodoItemService<TodoItemSelectionListDTO, 
+            TodoItemCreateUpdateDTO, TodoItemDTO, TodoItem> todoItemService)
         {
             _todoItemService = todoItemService;
         }
@@ -21,6 +23,7 @@
         public async Task<IActionResult> GetTodoItems()
         {
             var todoItems = await _todoItemService.GetAllAsync();
+
             return Ok(todoItems);
         }
 
@@ -37,12 +40,22 @@
             return Ok(todoItem);
         }
 
+        // GET: api/TodoItems/selection-list
+        [HttpGet("selection-list")]
+        public async Task<IActionResult> GetSelectionList()
+        {
+            var todoItems = await _todoItemService.GetSelectionListAsync();
+
+            return Ok(todoItems);
+        }
+
         // PUT: api/TodoItems/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task <IActionResult> PutTodoItem(long id, TodoItemDTO todoItemDTO)
         {
             await _todoItemService.UpdateAsync(todoItemDTO, id);
+
             return NoContent();
         }
 
@@ -67,6 +80,7 @@
             }
 
             await _todoItemService.DeleteAsync(id);
+
             return NoContent();
         }
     }

@@ -21,6 +21,7 @@
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userService.GetAllAsync();
+
             return Ok(users);
         }
 
@@ -43,6 +44,7 @@
         public async Task<IActionResult> PutUser(long id, UserCreateUpdateDTO userDTO)
         {
             await _userService.UpdateAsync(userDTO, id);
+
             return NoContent();
         }
 
@@ -67,6 +69,7 @@
             }
 
             await _userService.DeleteAsync(id);
+
             return NoContent();
         }
     }

@@ -7,7 +7,8 @@
     using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
 
-    public abstract class Service<TCreateUpdateDTO, TDTO, T> : IService<TCreateUpdateDTO, TDTO, T> where TCreateUpdateDTO : class where TDTO : class where T : class
+    public abstract class Service<TCreateUpdateDTO, TDTO, T> : IService<TCreateUpdateDTO, TDTO, T> where TCreateUpdateDTO 
+        : class where TDTO : class where T : class
     {
         private readonly IDataRepository<T> _dataRepository;
         private readonly IMapper _mapper;
@@ -22,7 +23,7 @@
 
         public async Task<IEnumerable<TDTO>> GetAllAsync()
         {
-            var items = await _dataRepository.GetAll().ProjectTo<TDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            var items = await _dataRepository.AsReadOnly().ProjectTo<TDTO>(_mapper.ConfigurationProvider).ToListAsync();
 
             return items;
         }

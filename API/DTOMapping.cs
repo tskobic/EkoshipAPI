@@ -10,6 +10,7 @@
         {
             CreateMap<User, UserDTO>();
             CreateMap<TodoItem, TodoItemDTO>();
+            CreateMap<TodoItem, TodoItemSelectionListDTO>();
         }
     }
 }
